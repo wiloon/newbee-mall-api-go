@@ -2,8 +2,8 @@
 local:
   path: static
 mysql:
-  path: 192.168.50.228
-  port: "32306"
+  path: 127.0.0.1
+  port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: newbee_mall
   username: root
