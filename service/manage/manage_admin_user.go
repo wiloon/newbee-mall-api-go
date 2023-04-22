@@ -2,6 +2,7 @@ package manage
 
 import (
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 	"main.go/global"
 	"main.go/model/manage"
@@ -66,6 +67,25 @@ func (m *ManageAdminUserService) GetMallAdminUser(token string) (err error, mall
 	}
 	err = global.GVA_DB.Where("admin_user_id = ?", adminToken.AdminUserId).First(&mallAdminUser).Error
 	return err, mallAdminUser
+}
+func (m *ManageAdminUserService) GetAllUser(token string) (err error, mallUser []manage.MallUser) {
+	var users []manage.MallUser
+	var adminToken manage.MallAdminUserToken
+	if errors.Is(global.GVA_DB.Where("token =?", token).First(&adminToken).Error, gorm.ErrRecordNotFound) {
+		return errors.New("不存在的用户"), mallUser
+	}
+	global.GVA_DB.Find(&users)
+	fmt.Println(users)
+	return err, users
+}
+func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []manage.MallShop) {
+	var adminToken manage.MallAdminUserToken
+	if errors.Is(global.GVA_DB.Where("token =?", token).First(&adminToken).Error, gorm.ErrRecordNotFound) {
+		return errors.New("不存在的用户"), shops
+	}
+	global.GVA_DB.Find(&shops)
+	fmt.Println(shops)
+	return err, shops
 }
 
 // AdminLogin 管理员登陆

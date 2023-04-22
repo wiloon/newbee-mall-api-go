@@ -19,7 +19,7 @@ func (m *MallOrderRouter) InitMallOrderRouter(Router *gin.RouterGroup) {
 		mallOrderRouter.PUT("/order/:orderNo/cancel", mallOrderRouterApi.CancelOrder) //取消订单接口
 		mallOrderRouter.GET("/order/:orderNo", mallOrderRouterApi.OrderDetailPage)    //订单详情接口
 		mallOrderRouter.GET("/order", mallOrderRouterApi.OrderList)                   //订单列表接口
-		mallOrderRouter.POST("/saveOrder", mallOrderRouterApi.SaveOrder)
+		mallOrderRouter.POST("/saveOrder", mallOrderRouterApi.SaveOrder)              // save order
 
 	}
 }

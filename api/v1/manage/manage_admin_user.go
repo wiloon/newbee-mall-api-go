@@ -78,6 +78,24 @@ func (m *ManageAdminUserApi) AdminUserProfile(c *gin.Context) {
 		response.OkWithData(mallAdminUser, c)
 	}
 }
+func (m *ManageAdminUserApi) AllUser(c *gin.Context) {
+	adminToken := c.GetHeader("token")
+	if err, allUser := mallAdminUserService.GetAllUser(adminToken); err != nil {
+		global.GVA_LOG.Error("未查询到记录", zap.Error(err))
+		response.FailWithMessage("未查询到记录", c)
+	} else {
+		response.OkWithData(allUser, c)
+	}
+}
+func (m *ManageAdminUserApi) AllShops(c *gin.Context) {
+	adminToken := c.GetHeader("token")
+	if err, allUser := mallAdminUserService.GetAllShops(adminToken); err != nil {
+		global.GVA_LOG.Error("未查询到记录", zap.Error(err))
+		response.FailWithMessage("未查询到记录", c)
+	} else {
+		response.OkWithData(allUser, c)
+	}
+}
 
 // AdminLogin 管理员登陆
 func (m *ManageAdminUserApi) AdminLogin(c *gin.Context) {
