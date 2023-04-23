@@ -24,6 +24,7 @@ func (r *ManageAdminUserRouter) InitManageAdminUserRouter(Router *gin.RouterGrou
 		mallAdminUserRouter.POST("upload/file", mallAdminUserApi.UploadFile) //上传图片
 		mallAdminUserRouter.GET("user/all", mallAdminUserApi.AllUser)
 		mallAdminUserRouter.GET("shops", mallAdminUserApi.AllShops)
+		mallAdminUserRouter.POST("adminSaveMember", mallAdminUserApi.AdminSaveMember)
 
 	}
 	{

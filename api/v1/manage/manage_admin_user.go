@@ -1,16 +1,21 @@
 package manage
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"main.go/global"
+	"main.go/model/common"
 	"main.go/model/common/request"
 	"main.go/model/common/response"
 	"main.go/model/example"
+	"main.go/model/mall"
+	mallReq "main.go/model/mall/request"
 	"main.go/model/manage"
 	manageReq "main.go/model/manage/request"
 	"main.go/utils"
 	"strconv"
+	"time"
 )
 
 type ManageAdminUserApi struct {
@@ -95,6 +100,29 @@ func (m *ManageAdminUserApi) AllShops(c *gin.Context) {
 	} else {
 		response.OkWithData(allUser, c)
 	}
+}
+func (m *ManageAdminUserApi) AdminSaveMember(c *gin.Context) {
+	var memberParams mallReq.AdminSaveMemberParam
+	_ = c.ShouldBindJSON(&memberParams)
+
+	adminToken := c.GetHeader("token")
+	_ = adminToken
+	//todo admin token check
+	var member mall.MallUser
+	member.NickName = memberParams.NickName
+	member.LoginName = memberParams.Username
+	member.PasswordMd5 = memberParams.Password
+	member.IsDeleted = 0
+	member.LockedFlag = 0
+	member.CreateTime = common.JSONTime{Time: time.Now()}
+
+	global.GVA_LOG.Info(fmt.Sprintf("admin save member, params: %v", memberParams))
+
+	if err := global.GVA_DB.Save(&member).Error; err != nil {
+		response.FailWithMessage("failed to create member: "+err.Error(), c)
+	}
+
+	response.OkWithData("ok", c)
 }
 
 // AdminLogin 管理员登陆

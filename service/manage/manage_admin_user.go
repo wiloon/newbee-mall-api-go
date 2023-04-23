@@ -87,6 +87,15 @@ func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []m
 	fmt.Println(shops)
 	return err, shops
 }
+func (m *ManageAdminUserService) SaveMember(token string) (err error, shops []manage.MallShop) {
+	var adminToken manage.MallAdminUserToken
+	if errors.Is(global.GVA_DB.Where("token =?", token).First(&adminToken).Error, gorm.ErrRecordNotFound) {
+		return errors.New("不存在的用户"), shops
+	}
+	global.GVA_DB.Find(&shops)
+	fmt.Println(shops)
+	return err, shops
+}
 
 // AdminLogin 管理员登陆
 func (m *ManageAdminUserService) AdminLogin(params manageReq.MallAdminLoginParam) (err error, mallAdminUser manage.MallAdminUser, adminToken manage.MallAdminUserToken) {
