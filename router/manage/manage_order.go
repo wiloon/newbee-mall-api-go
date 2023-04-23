@@ -18,6 +18,7 @@ func (r *ManageOrderRouter) InitManageOrderRouter(Router *gin.RouterGroup) {
 		mallOrderRouter.PUT("orders/close", mallOrderApi.CloseOrder)         // 出库
 		mallOrderRouter.GET("orders/:orderId", mallOrderApi.FindMallOrder)   // 根据ID获取MallOrder
 		mallOrderRouter.GET("orders", mallOrderApi.GetMallOrderList)         // 获取MallOrder列表
+		mallOrderRouter.GET("shoporders", mallOrderApi.GetMallShopOrderList) // 获取MallOrder列表
 		mallOrderRouter.POST("adminSaveOrder", mallOrderApi.AdminSaveOrder)  // admin save order
 		mallOrderRouter.POST("adminSaveShop", mallOrderApi.AdminSaveShop)    // admin save shop
 	}

@@ -63,6 +63,24 @@ func (m *ManageOrderApi) FindMallOrder(c *gin.Context) {
 		response.OkWithData(newBeeMallOrderDetailVO, c)
 	}
 }
+func (m *ManageOrderApi) GetMallShopOrderList(c *gin.Context) {
+	var pageInfo request.PageInfo
+	_ = c.ShouldBindQuery(&pageInfo)
+	orderNo := c.Query("orderNo")
+	orderStatus := c.Query("orderStatus")
+	shopId := c.Query("shopId")
+	if err, list, total := mallOrderService.GetMallShopOrderInfoList(pageInfo, orderNo, orderStatus, shopId); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:       list,
+			TotalCount: total,
+			CurrPage:   pageInfo.PageNumber,
+			PageSize:   pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
 
 // GetMallOrderList 分页获取MallOrder列表
 func (m *ManageOrderApi) GetMallOrderList(c *gin.Context) {
@@ -70,7 +88,8 @@ func (m *ManageOrderApi) GetMallOrderList(c *gin.Context) {
 	_ = c.ShouldBindQuery(&pageInfo)
 	orderNo := c.Query("orderNo")
 	orderStatus := c.Query("orderStatus")
-	if err, list, total := mallOrderService.GetMallOrderInfoList(pageInfo, orderNo, orderStatus); err != nil {
+	shopId := c.Query("shopId")
+	if err, list, total := mallOrderService.GetMallOrderInfoList(pageInfo, orderNo, orderStatus, shopId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

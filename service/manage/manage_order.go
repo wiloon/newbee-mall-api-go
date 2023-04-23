@@ -120,7 +120,7 @@ func (m *ManageOrderService) GetMallOrder(id string) (err error, newBeeMallOrder
 }
 
 // GetMallOrderInfoList 分页获取MallOrder记录
-func (m *ManageOrderService) GetMallOrderInfoList(info request.PageInfo, orderNo string, orderStatus string) (err error, list interface{}, total int64) {
+func (m *ManageOrderService) GetMallOrderInfoList(info request.PageInfo, orderNo string, orderStatus string, shopId string) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.PageNumber - 1)
 	// 创建db
@@ -141,4 +141,40 @@ func (m *ManageOrderService) GetMallOrderInfoList(info request.PageInfo, orderNo
 	}
 	err = db.Limit(limit).Offset(offset).Order("update_time desc").Find(&mallOrders).Error
 	return err, mallOrders, total
+}
+
+type ShopOrderResult struct {
+	OrderNo      int    `json:"orderNo"`
+	TotalPrice   string `json:"totalPrice"`
+	OrderStatus  int    `json:"orderStatus"`
+	CreateTime   string `json:"createTime"`
+	GoodsName    string `json:"goodsName"`
+	GoodsCount   string `json:"goodsCount"`
+	SellingPrice string `json:"sellingPrice"`
+}
+
+// GetMallShopOrderInfoList 分页获取MallOrder记录
+func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, orderNo string, orderStatus string, shopId string) (err error, list interface{}, total int64) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.PageNumber - 1)
+
+	var shopOrders []ShopOrderResult
+	db := global.GVA_DB.Model(&manage.MallOrder{})
+	db.Select("tb_newbee_mall_order.order_no,tb_newbee_mall_order.total_price,tb_newbee_mall_order.order_status,tb_newbee_mall_order.create_time,i.goods_name,i.goods_count,i.selling_price")
+	db.Joins("join tb_newbee_mall_order_item i on tb_newbee_mall_order.order_id=i.order_id")
+	db.Joins("join tb_newbee_mall_goods_info g on i.goods_id=g.goods_id")
+	db.Joins("join shop s on g.shop_id=s.id")
+
+	if shopId != "" {
+		shopIdInt, _ := strconv.Atoi(shopId)
+		db.Where("shop_id", shopIdInt)
+	}
+
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+
+	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&shopOrders).Error
+	return err, shopOrders, total
 }
