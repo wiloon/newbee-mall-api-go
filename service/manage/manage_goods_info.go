@@ -99,7 +99,7 @@ func (m *ManageGoodsInfoService) GetMallGoodsInfo(id int) (err error, mallGoodsI
 }
 
 // GetMallGoodsInfoInfoList 分页获取MallGoodsInfo记录
-func (m *ManageGoodsInfoService) GetMallGoodsInfoInfoList(info manageReq.MallGoodsInfoSearch, goodsName string, goodsSellStatus string) (err error, list interface{}, total int64) {
+func (m *ManageGoodsInfoService) GetMallGoodsInfoInfoList(info manageReq.MallGoodsInfoSearch, goodsName string, goodsSellStatus string, shopId int) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.PageNumber - 1)
 	// 创建db
@@ -115,6 +115,9 @@ func (m *ManageGoodsInfoService) GetMallGoodsInfoInfoList(info manageReq.MallGoo
 	}
 	if goodsSellStatus != "" {
 		db.Where("goods_sell_status =?", goodsSellStatus)
+	}
+	if shopId > -1 {
+		db.Where("shop_id =?", shopId)
 	}
 	err = db.Limit(limit).Offset(offset).Order("goods_id desc").Find(&mallGoodsInfos).Error
 	return err, mallGoodsInfos, total

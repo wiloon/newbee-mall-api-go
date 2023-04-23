@@ -1,6 +1,7 @@
 package manage
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"main.go/global"
@@ -85,13 +86,19 @@ func (m *ManageGoodsInfoApi) FindGoodsInfo(c *gin.Context) {
 
 }
 
-// GetMallGoodsInfoList 分页获取MallGoodsInfo列表
+// GetGoodsInfoList 分页获取MallGoodsInfo列表
 func (m *ManageGoodsInfoApi) GetGoodsInfoList(c *gin.Context) {
 	var pageInfo manageReq.MallGoodsInfoSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	goodsName := c.Query("goodsName")
 	goodsSellStatus := c.Query("goodsSellStatus")
-	if err, list, total := mallGoodsInfoService.GetMallGoodsInfoInfoList(pageInfo, goodsName, goodsSellStatus); err != nil {
+	shopIdQuery := c.Query("shopId")
+	shopId := -1
+	if shopIdQuery != "" {
+		shopId, _ = strconv.Atoi(shopIdQuery)
+	}
+	global.GVA_LOG.Info(fmt.Sprintf("shop id query: %s", shopIdQuery))
+	if err, list, total := mallGoodsInfoService.GetMallGoodsInfoInfoList(pageInfo, goodsName, goodsSellStatus, shopId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)
 	} else {
