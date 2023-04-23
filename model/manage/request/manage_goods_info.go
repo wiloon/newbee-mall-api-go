@@ -12,6 +12,7 @@ type MallGoodsInfoSearch struct {
 }
 
 type GoodsInfoAddParam struct {
+	Shop               int    `json:"shop"`
 	GoodsName          string `json:"goodsName"`
 	GoodsIntro         string `json:"goodsIntro"`
 	GoodsCategoryId    int    `json:"goodsCategoryId"`

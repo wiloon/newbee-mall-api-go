@@ -82,7 +82,21 @@ func (m *ManageOrderApi) GetMallOrderList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+func (m *ManageOrderApi) AdminSaveShop(c *gin.Context) {
+	var saveShopParam mallReq.AdminSaveShopParam
+	_ = c.ShouldBindJSON(&saveShopParam)
 
+	var shop manage.MallShop
+	shop.Name = saveShopParam.Name
+	shop.Owner = saveShopParam.OwnerId
+	shop.CreateTime = common.JSONTime{Time: time.Now()}
+
+	if err := global.GVA_DB.Save(&shop).Error; err != nil {
+		response.FailWithMessage("生成店铺失败:"+err.Error(), c)
+	}
+
+	response.OkWithData("ok", c)
+}
 func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	var saveOrderParam mallReq.AdminSaveOrderParam
 	_ = c.ShouldBindJSON(&saveOrderParam)
@@ -113,6 +127,18 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	newBeeMallOrder.PayType = saveOrderParam.PayType
 	//生成订单项并保存订单项纪录
 	if err = global.GVA_DB.Save(&newBeeMallOrder).Error; err != nil {
+		response.FailWithMessage("生成订单失败:"+err.Error(), c)
+	}
+
+	orderItem := manage.MallOrderItem{}
+	orderItem.OrderId = newBeeMallOrder.OrderId
+	orderItem.CreateTime = common.JSONTime{Time: time.Now()}
+	orderItem.GoodsCount = saveOrderParam.Number
+	orderItem.GoodsId = saveOrderParam.Goods
+	orderItem.GoodsCoverImg = goodsInfo.GoodsCoverImg
+	orderItem.GoodsName = goodsInfo.GoodsName
+	orderItem.SellingPrice = goodsInfo.SellingPrice
+	if err = global.GVA_DB.Save(&orderItem).Error; err != nil {
 		response.FailWithMessage("生成订单失败:"+err.Error(), c)
 	}
 

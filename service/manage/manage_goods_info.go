@@ -44,6 +44,7 @@ func (m *ManageGoodsInfoService) CreateMallGoodsInfo(req manageReq.GoodsInfoAddP
 		GoodsSellStatus:    goodsSellStatus,
 		CreateTime:         common.JSONTime{Time: time.Now()},
 		UpdateTime:         common.JSONTime{Time: time.Now()},
+		ShopId:             req.Shop,
 	}
 	if err = utils.Verify(goodsInfo, utils.GoodsAddParamVerify); err != nil {
 		return errors.New(err.Error())

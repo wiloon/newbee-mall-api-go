@@ -23,3 +23,7 @@ type AdminSaveOrderParam struct {
 	Number      int `json:"number"`
 	OrderStatus int `json:"orderStatus"`
 }
+type AdminSaveShopParam struct {
+	Name    string `json:"name"`
+	OwnerId int    `json:"ownerId"`
+}

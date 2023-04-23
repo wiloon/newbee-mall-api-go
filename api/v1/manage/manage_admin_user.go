@@ -94,11 +94,16 @@ func (m *ManageAdminUserApi) AllUser(c *gin.Context) {
 }
 func (m *ManageAdminUserApi) AllShops(c *gin.Context) {
 	adminToken := c.GetHeader("token")
-	if err, allUser := mallAdminUserService.GetAllShops(adminToken); err != nil {
+	if err, shops := mallAdminUserService.GetAllShops(adminToken); err != nil {
 		global.GVA_LOG.Error("未查询到记录", zap.Error(err))
 		response.FailWithMessage("未查询到记录", c)
 	} else {
-		response.OkWithData(allUser, c)
+		response.OkWithDetailed(response.PageResult{
+			List:       shops,
+			TotalCount: 200,
+			CurrPage:   0,
+			PageSize:   200,
+		}, "获取成功", c)
 	}
 }
 func (m *ManageAdminUserApi) AdminSaveMember(c *gin.Context) {

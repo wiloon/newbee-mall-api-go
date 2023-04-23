@@ -78,12 +78,23 @@ func (m *ManageAdminUserService) GetAllUser(token string) (err error, mallUser [
 	fmt.Println(users)
 	return err, users
 }
-func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []manage.MallShop) {
+
+type ShopResult struct {
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Owner      int    `json:"owner"`
+	NickName   string `json:"nickName"`
+	CreateTime string `json:"createTime"`
+}
+
+func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []ShopResult) {
 	var adminToken manage.MallAdminUserToken
 	if errors.Is(global.GVA_DB.Where("token =?", token).First(&adminToken).Error, gorm.ErrRecordNotFound) {
 		return errors.New("不存在的用户"), shops
 	}
-	global.GVA_DB.Find(&shops)
+	//global.GVA_DB.Find(&shops)
+
+	global.GVA_DB.Model(&manage.MallShop{}).Select("shop.id,shop.name,shop.owner,u.nick_name,shop.create_time").Joins("join tb_newbee_mall_user u on shop.owner=u.user_id").Scan(&shops)
 	fmt.Println(shops)
 	return err, shops
 }
