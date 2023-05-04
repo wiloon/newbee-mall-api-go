@@ -14,6 +14,7 @@ type server interface {
 }
 
 func RunWindowsServer() {
+	fmt.Println("run win server")
 	Router := initialize.Routers()
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)

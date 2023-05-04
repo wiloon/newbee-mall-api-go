@@ -18,6 +18,7 @@ func (m *MallUserRouter) InitMallShopCartRouter(Router *gin.RouterGroup) {
 		mallShopCartRouter.PUT("/shop-cart", mallShopCartApi.UpdateMallShoppingCartItem)                               //修改购物车
 		mallShopCartRouter.DELETE("/shop-cart/:newBeeMallShoppingCartItemId", mallShopCartApi.DelMallShoppingCartItem) //删除购物车
 		mallShopCartRouter.GET("/shop-cart/settle", mallShopCartApi.ToSettle)                                          //根据购物项id数组查询购物项明细
+		mallShopCartRouter.GET("/shop/:shopId", mallShopCartApi.ShopInfo)                                              //根据购物项id数组查询购物项明细
 
 	}
 }

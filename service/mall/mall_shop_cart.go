@@ -2,6 +2,8 @@ package mall
 
 import (
 	"errors"
+	"fmt"
+	"main.go/shop"
 	"time"
 
 	"github.com/jinzhu/copier"
@@ -129,6 +131,13 @@ func (m *MallShopCartService) DeleteMallCartItem(token string, id int) (err erro
 	}
 	err = global.GVA_DB.Where("cart_item_id = ? and is_deleted = 0", id).UpdateColumns(&mall.MallShoppingCartItem{IsDeleted: 1}).Error
 	return
+}
+
+func (m *MallShopCartService) GetShopInfo(token string, shopId int) (error, shop.Result) {
+	sr := shop.Result{}
+	global.GVA_DB.Model(&manage.MallShop{}).Select("shop.id,shop.name,shop.owner,u.nick_name,shop.create_time").Joins("join tb_newbee_mall_user u on shop.owner=u.user_id").Where("shop.id=?", shopId).Scan(&sr)
+	fmt.Println(sr)
+	return nil, sr
 }
 
 func (m *MallShopCartService) GetCartItemsForSettle(token string, cartItemIds []int) (err error, cartItemRes []mallRes.CartItemResponse) {

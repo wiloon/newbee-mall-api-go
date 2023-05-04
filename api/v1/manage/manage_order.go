@@ -52,6 +52,15 @@ func (m *ManageOrderApi) CloseOrder(c *gin.Context) {
 		response.OkWithMessage("更新成功", c)
 	}
 }
+func (m *ManageOrderApi) FindShopOrder(c *gin.Context) {
+	id := c.Param("orderId")
+	if err, newBeeMallOrderDetailVO := mallOrderService.GetShopOrder(id); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(newBeeMallOrderDetailVO, c)
+	}
+}
 
 // FindMallOrder 用id查询MallOrder
 func (m *ManageOrderApi) FindMallOrder(c *gin.Context) {
@@ -66,10 +75,8 @@ func (m *ManageOrderApi) FindMallOrder(c *gin.Context) {
 func (m *ManageOrderApi) GetMallShopOrderList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindQuery(&pageInfo)
-	orderNo := c.Query("orderNo")
-	orderStatus := c.Query("orderStatus")
 	shopId := c.Query("shopId")
-	if err, list, total := mallOrderService.GetMallShopOrderInfoList(pageInfo, orderNo, orderStatus, shopId); err != nil {
+	if err, list, total := mallOrderService.GetMallShopOrderInfoList(pageInfo, shopId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -119,15 +126,26 @@ func (m *ManageOrderApi) AdminSaveShop(c *gin.Context) {
 func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	var saveOrderParam mallReq.AdminSaveOrderParam
 	_ = c.ShouldBindJSON(&saveOrderParam)
+	global.GVA_LOG.Info(fmt.Sprintf("admin save order, params: %+v", saveOrderParam))
+	var newBeeMallOrder manage.MallOrder
+
+	if saveOrderParam.OrderId > -1 {
+		// update
+		newBeeMallOrder.OrderId = saveOrderParam.OrderId
+		newBeeMallOrder.OrderNo = saveOrderParam.OrderNo
+	} else {
+		//create
+		//生成订单号
+		orderNo := utils.GenOrderNo()
+		newBeeMallOrder.OrderNo = orderNo
+	}
+
 	token := c.GetHeader("token")
 	global.GVA_LOG.Info(fmt.Sprintf("token: %v, params: %+v", token, saveOrderParam))
 
-	//生成订单号
-	orderNo := utils.GenOrderNo()
 	priceTotal := 0
 	//保存订单
-	var newBeeMallOrder manage.MallOrder
-	newBeeMallOrder.OrderNo = orderNo
+
 	newBeeMallOrder.UserId = saveOrderParam.Member
 	err, goodsInfo := mallGoodsInfoService.GetMallGoodsInfo(saveOrderParam.Goods)
 	if err != nil {
@@ -137,8 +155,13 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 
 	priceTotal = saveOrderParam.Number * goodsInfo.SellingPrice
 	global.GVA_LOG.Info(fmt.Sprintf("goods info: %+v, price total:=·]%v", goodsInfo, priceTotal))
-
-	newBeeMallOrder.CreateTime = common.JSONTime{Time: time.Now()}
+	l, _ := time.LoadLocation("Asia/Shanghai")
+	ct, err := time.ParseInLocation("2006-1-2 15:4:5", saveOrderParam.CreateTime, l)
+	if err != nil {
+		global.GVA_LOG.Error("failed to parse time str," + err.Error())
+	}
+	global.GVA_LOG.Info(fmt.Sprintf("order create time: %v", ct))
+	newBeeMallOrder.CreateTime = common.JSONTime{Time: ct}
 	newBeeMallOrder.UpdateTime = common.JSONTime{Time: time.Now()}
 	newBeeMallOrder.TotalPrice = priceTotal
 	newBeeMallOrder.ExtraInfo = ""
@@ -151,9 +174,14 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 
 	orderItem := manage.MallOrderItem{}
 	orderItem.OrderId = newBeeMallOrder.OrderId
+	if err = global.GVA_DB.Where("order_id=?", newBeeMallOrder.OrderId).Delete(&orderItem).Error; err != nil {
+		global.GVA_LOG.Info("failed to delete order item" + err.Error())
+	}
+
+	orderItem.GoodsId = saveOrderParam.Goods
 	orderItem.CreateTime = common.JSONTime{Time: time.Now()}
 	orderItem.GoodsCount = saveOrderParam.Number
-	orderItem.GoodsId = saveOrderParam.Goods
+
 	orderItem.GoodsCoverImg = goodsInfo.GoodsCoverImg
 	orderItem.GoodsName = goodsInfo.GoodsName
 	orderItem.SellingPrice = goodsInfo.SellingPrice

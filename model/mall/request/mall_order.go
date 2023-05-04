@@ -16,12 +16,15 @@ type SaveOrderParam struct {
 }
 
 type AdminSaveOrderParam struct {
-	Member      int `json:"member"`
-	Shop        int `json:"shop"`
-	Goods       int `json:"goods"`
-	PayType     int `json:"payType"`
-	Number      int `json:"number"`
-	OrderStatus int `json:"orderStatus"`
+	OrderId     int    `json:"orderId"`
+	OrderNo     string `json:"orderNo"`
+	Member      int    `json:"member"`
+	Shop        int    `json:"shop"`
+	Goods       int    `json:"goods"`
+	PayType     int    `json:"payType"`
+	Number      int    `json:"number"`
+	OrderStatus int    `json:"orderStatus"`
+	CreateTime  string `json:"createTime"`
 }
 type AdminSaveShopParam struct {
 	Name    string `json:"name"`

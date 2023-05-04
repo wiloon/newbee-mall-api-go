@@ -6,6 +6,7 @@ import (
 	"main.go/global"
 	"main.go/model/common/enum"
 	"main.go/model/common/response"
+	"strconv"
 )
 
 type MallIndexApi struct {
@@ -33,11 +34,19 @@ func (m *MallIndexApi) MallIndexInfo(c *gin.Context) {
 		global.GVA_LOG.Error("推荐商品获取失败"+err.Error(), zap.Error(err))
 		response.FailWithMessage("推荐商品获取失败", c)
 	}
+	shop, _ := strconv.Atoi(c.Query("shop"))
+	err, shopGoods := mallIndexConfigService.GetShopGoods(shop)
+	if err != nil {
+		global.GVA_LOG.Error("failed to get shop goods"+err.Error(), zap.Error(err))
+		response.FailWithMessage("failed to get shop goods", c)
+	}
+
 	indexResult := make(map[string]interface{})
 	indexResult["carousels"] = mallCarouseInfo
 	indexResult["hotGoodses"] = hotGoodses
 	indexResult["newGoodses"] = newGoodses
 	indexResult["recommendGoodses"] = recommendGoodses
-	response.OkWithData(indexResult, c)
+	indexResult["shopGoods"] = shopGoods
 
+	response.OkWithData(indexResult, c)
 }

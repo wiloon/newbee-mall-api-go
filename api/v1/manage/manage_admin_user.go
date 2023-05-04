@@ -127,6 +127,18 @@ func (m *ManageAdminUserApi) AdminSaveMember(c *gin.Context) {
 		response.FailWithMessage("failed to create member: "+err.Error(), c)
 	}
 
+	var defaultAddress mall.MallUserAddress
+	defaultAddress.CreateTime = common.JSONTime{Time: time.Now()}
+	defaultAddress.UpdateTime = common.JSONTime{Time: time.Now()}
+	defaultAddress.UserId = member.UserId
+	defaultAddress.UserName = memberParams.RecipientName
+	defaultAddress.UserPhone = memberParams.RecipientMobile
+	defaultAddress.DetailAddress = memberParams.RecipientAddress
+	defaultAddress.DefaultFlag = 1
+	err := global.GVA_DB.Save(&defaultAddress).Error
+	if err != nil {
+		response.FailWithMessage("failed to create member: "+err.Error(), c)
+	}
 	response.OkWithData("ok", c)
 }
 

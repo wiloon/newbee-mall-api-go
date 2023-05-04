@@ -60,6 +60,7 @@ func (m *MallUserAddressApi) GetMallUserAddress(c *gin.Context) {
 	}
 }
 
+// get address
 func (m *MallUserAddressApi) GetMallUserDefaultAddress(c *gin.Context) {
 	token := c.GetHeader("token")
 	if err, userAddress := mallUserAddressService.GetMallUserDefaultAddress(token); err != nil {

@@ -69,3 +69,15 @@ func (m *MallShopCartApi) ToSettle(c *gin.Context) {
 	}
 
 }
+func (m *MallShopCartApi) ShopInfo(c *gin.Context) {
+	shopId, _ := strconv.Atoi(c.Param("shopId"))
+	token := c.GetHeader("token")
+
+	if err, shopInfo := mallShopCartService.GetShopInfo(token, shopId); err != nil {
+		global.GVA_LOG.Error("failed to get shop info：", zap.Error(err))
+		response.FailWithMessage("failed to get shop info:"+err.Error(), c)
+	} else {
+		response.OkWithData(shopInfo, c)
+	}
+
+}

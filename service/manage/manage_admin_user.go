@@ -7,6 +7,7 @@ import (
 	"main.go/global"
 	"main.go/model/manage"
 	manageReq "main.go/model/manage/request"
+	"main.go/shop"
 	"main.go/utils"
 	"strconv"
 	"strings"
@@ -79,15 +80,7 @@ func (m *ManageAdminUserService) GetAllUser(token string) (err error, mallUser [
 	return err, users
 }
 
-type ShopResult struct {
-	Id         int    `json:"id"`
-	Name       string `json:"name"`
-	Owner      int    `json:"owner"`
-	NickName   string `json:"nickName"`
-	CreateTime string `json:"createTime"`
-}
-
-func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []ShopResult) {
+func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []shop.Result) {
 	var adminToken manage.MallAdminUserToken
 	if errors.Is(global.GVA_DB.Where("token =?", token).First(&adminToken).Error, gorm.ErrRecordNotFound) {
 		return errors.New("不存在的用户"), shops

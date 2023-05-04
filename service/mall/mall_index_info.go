@@ -10,6 +10,12 @@ import (
 type MallIndexInfoService struct {
 }
 
+func (m *MallIndexInfoService) GetShopGoods(shop int) (err error, goodsList interface{}) {
+	var mallGoodsInfos []manage.MallGoodsInfo
+	global.GVA_DB.Where("shop_id=?", shop).Find(&mallGoodsInfos)
+	return err, mallGoodsInfos
+}
+
 // GetConfigGoodsForIndex 首页返回相关IndexConfig
 func (m *MallIndexInfoService) GetConfigGoodsForIndex(configType int, num int) (err error, list interface{}) {
 	var indexConfigs []manage.MallIndexConfig
