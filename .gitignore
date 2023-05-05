@@ -18,3 +18,4 @@ go.sum
 # vendor/
 .idea
 newbee-mall-api
+static

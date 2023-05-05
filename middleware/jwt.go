@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/model/common/response"
 	"main.go/service"
+	"strings"
 	"time"
 )
 
@@ -40,6 +41,10 @@ func AdminJWTAuth() gin.HandlerFunc {
 
 func UserJWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if strings.Contains(c.Request.RequestURI, "/v1/shop/") {
+			c.Next()
+			return
+		}
 		token := c.Request.Header.Get("token")
 		if token == "" {
 			response.UnLogin(nil, c)

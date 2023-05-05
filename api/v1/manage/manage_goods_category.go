@@ -1,6 +1,7 @@
 package manage
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"main.go/global"
@@ -19,6 +20,7 @@ type ManageGoodsCategoryApi struct {
 func (g *ManageGoodsCategoryApi) CreateCategory(c *gin.Context) {
 	var category manageReq.MallGoodsCategoryReq
 	_ = c.ShouldBindJSON(&category)
+	global.GVA_LOG.Info(fmt.Sprintf("create category, params: %+v", category))
 	if err := mallGoodsCategoryService.AddCategory(category); err != nil {
 		global.GVA_LOG.Error("创建失败", zap.Error(err))
 		response.FailWithMessage("创建失败:"+err.Error(), c)

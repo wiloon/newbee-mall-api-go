@@ -51,7 +51,7 @@ func (m *ManageGoodsInfoApi) ChangeGoodsInfoByIds(c *gin.Context) {
 	}
 }
 
-// UpdateMallGoodsInfo 更新MallGoodsInfo
+// UpdateGoodsInfo 更新MallGoodsInfo
 func (m *ManageGoodsInfoApi) UpdateGoodsInfo(c *gin.Context) {
 	var mallGoodsInfo manageReq.GoodsInfoUpdateParam
 	_ = c.ShouldBindJSON(&mallGoodsInfo)

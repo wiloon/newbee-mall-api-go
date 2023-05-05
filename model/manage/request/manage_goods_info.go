@@ -35,7 +35,7 @@ type GoodsInfoUpdateParam struct {
 	GoodsCoverImg      string          `json:"goodsCoverImg"`
 	GoodsCarousel      string          `json:"goodsCarousel"`
 	GoodsDetailContent string          `json:"goodsDetailContent"`
-	OriginalPrice      string          `json:"originalPrice"`
+	OriginalPrice      int             `json:"originalPrice"`
 	SellingPrice       int             `json:"sellingPrice"`
 	StockNum           string          `json:"stockNum"`
 	Tag                string          `json:"tag"`

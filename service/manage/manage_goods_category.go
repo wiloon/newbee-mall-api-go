@@ -9,7 +9,6 @@ import (
 	"main.go/model/manage"
 	manageReq "main.go/model/manage/request"
 	"main.go/utils"
-	"strconv"
 	"time"
 )
 
@@ -22,11 +21,12 @@ func (m *ManageGoodsCategoryService) AddCategory(req manageReq.MallGoodsCategory
 		req.CategoryLevel, req.CategoryName).First(&manage.MallGoodsCategory{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同分类")
 	}
-	rank, _ := strconv.Atoi(req.CategoryRank)
+
 	category := manage.MallGoodsCategory{
 		CategoryLevel: req.CategoryLevel,
 		CategoryName:  req.CategoryName,
-		CategoryRank:  rank,
+		CategoryRank:  req.CategoryRank,
+		ParentId:      req.ParentId,
 		IsDeleted:     0,
 		CreateTime:    common.JSONTime{Time: time.Now()},
 		UpdateTime:    common.JSONTime{Time: time.Now()},
@@ -44,10 +44,10 @@ func (m *ManageGoodsCategoryService) UpdateCategory(req manageReq.MallGoodsCateg
 		req.CategoryLevel, req.CategoryName).First(&manage.MallGoodsCategory{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同分类")
 	}
-	rank, _ := strconv.Atoi(req.CategoryRank)
+
 	category := manage.MallGoodsCategory{
 		CategoryName: req.CategoryName,
-		CategoryRank: rank,
+		CategoryRank: req.CategoryRank,
 		UpdateTime:   common.JSONTime{Time: time.Now()},
 	}
 	// 这个校验理论上应该放在api层，但是因为前端的传值是string，而我们的校验规则是Int,所以只能转换格式后再校验

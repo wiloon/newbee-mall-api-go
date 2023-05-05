@@ -1,6 +1,7 @@
 ## 本地图片上传路径
 local:
   path: static
+  imageurlprefix: "http://localhost:8888/"
 mysql:
   path: 192.168.50.228
   port: "32306"

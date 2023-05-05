@@ -70,7 +70,7 @@ func (m *ManageGoodsInfoService) ChangeMallGoodsInfoByIds(ids request.IdsReq, se
 // UpdateMallGoodsInfo 更新MallGoodsInfo记录
 func (m *ManageGoodsInfoService) UpdateMallGoodsInfo(req manageReq.GoodsInfoUpdateParam) (err error) {
 	goodsId, _ := strconv.Atoi(req.GoodsId)
-	originalPrice, _ := strconv.Atoi(req.OriginalPrice)
+	originalPrice := req.OriginalPrice
 	stockNum, _ := strconv.Atoi(req.StockNum)
 	goodsInfo := manage.MallGoodsInfo{
 		GoodsId:            goodsId,

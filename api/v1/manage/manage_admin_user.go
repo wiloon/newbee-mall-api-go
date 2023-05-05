@@ -211,6 +211,8 @@ func (m *ManageAdminUserApi) UploadFile(c *gin.Context) {
 		response.FailWithMessage("修改数据库链接失败", c)
 		return
 	}
-	//这里直接使用本地的url
-	response.OkWithData("http://localhost:8888/"+file.Url, c)
+
+	// 这里直接使用本地的url
+	urlPrefix := global.GVA_CONFIG.Local.Imageurlprefix
+	response.OkWithData(urlPrefix+file.Url, c)
 }

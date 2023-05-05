@@ -1,6 +1,7 @@
 ## 本地图片上传路径
 local:
   path: static
+  imageurlprefix: "https://mall-admin.wiloon.com/"
 mysql:
   path: 127.0.0.1
   port: "3306"

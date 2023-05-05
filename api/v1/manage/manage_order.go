@@ -156,7 +156,7 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	priceTotal = saveOrderParam.Number * goodsInfo.SellingPrice
 	global.GVA_LOG.Info(fmt.Sprintf("goods info: %+v, price total:=·]%v", goodsInfo, priceTotal))
 	l, _ := time.LoadLocation("Asia/Shanghai")
-	ct, err := time.ParseInLocation("2006-1-2 15:4:5", saveOrderParam.CreateTime, l)
+	ct, err := time.ParseInLocation("2006-1-2T15:4:5", saveOrderParam.CreateTime, l)
 	if err != nil {
 		global.GVA_LOG.Error("failed to parse time str," + err.Error())
 	}
@@ -167,6 +167,7 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	newBeeMallOrder.ExtraInfo = ""
 	newBeeMallOrder.OrderStatus = saveOrderParam.OrderStatus
 	newBeeMallOrder.PayType = saveOrderParam.PayType
+	global.GVA_LOG.Info(fmt.Sprintf("saving order, order id: %v,create time: %v", newBeeMallOrder.OrderId, newBeeMallOrder.CreateTime))
 	//生成订单项并保存订单项纪录
 	if err = global.GVA_DB.Save(&newBeeMallOrder).Error; err != nil {
 		response.FailWithMessage("生成订单失败:"+err.Error(), c)

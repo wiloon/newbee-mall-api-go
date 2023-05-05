@@ -133,7 +133,7 @@ func (m *MallShopCartService) DeleteMallCartItem(token string, id int) (err erro
 	return
 }
 
-func (m *MallShopCartService) GetShopInfo(token string, shopId int) (error, shop.Result) {
+func (m *MallShopCartService) GetShopInfo(shopId int) (error, shop.Result) {
 	sr := shop.Result{}
 	global.GVA_DB.Model(&manage.MallShop{}).Select("shop.id,shop.name,shop.owner,u.nick_name,shop.create_time").Joins("join tb_newbee_mall_user u on shop.owner=u.user_id").Where("shop.id=?", shopId).Scan(&sr)
 	fmt.Println(sr)
