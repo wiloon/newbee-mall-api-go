@@ -2,7 +2,6 @@ package manage
 
 import (
 	"errors"
-	"fmt"
 	"github.com/jinzhu/copier"
 	"main.go/global"
 	"main.go/model/common"
@@ -186,28 +185,32 @@ func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, sho
 	limit := info.PageSize
 	offset := info.PageSize * (info.PageNumber - 1)
 
+	shopIdInt, _ := strconv.Atoi(shopId)
 	var shopOrders []ShopOrderResult
 	db := global.GVA_DB.Model(&manage.MallOrder{})
 	db.Select("tb_newbee_mall_order.order_no,tb_newbee_mall_order.total_price,tb_newbee_mall_order.order_status,DATE_FORMAT(tb_newbee_mall_order.create_time,\"%Y-%m-%d %T\") as create_time,i.goods_name,i.goods_count,i.selling_price,g.goods_cover_img")
 	db.Joins("join tb_newbee_mall_order_item i on tb_newbee_mall_order.order_id=i.order_id")
 	db.Joins("join tb_newbee_mall_goods_info g on i.goods_id=g.goods_id")
 	db.Joins("join shop s on g.shop_id=s.id")
-
-	shopIdInt, _ := strconv.Atoi(shopId)
-	db.Where("shop_id", shopIdInt)
-
-	err = db.Count(&total).Error
-	if err != nil {
-		return
-	}
-
+	db.Where("shop_id=?", shopIdInt)
 	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&shopOrders).Error
 
-	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("shop_id=?", shopIdInt).Scan(&sr)
-
-	global.GVA_LOG.Info(fmt.Sprintf("sum result, count: %v, sum: %v", sr.Count, sr.Sum))
-
-	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("shop_id=? and order_status=4 and pay_status=1", shopIdInt).Scan(&srp)
+	// count
+	db = global.GVA_DB.Model(&manage.MallOrder{})
+	db.Select("count(*) as count, sum(tb_newbee_mall_order.total_price) as sum")
+	db.Joins("join tb_newbee_mall_order_item i on tb_newbee_mall_order.order_id=i.order_id")
+	db.Joins("join tb_newbee_mall_goods_info g on i.goods_id=g.goods_id")
+	db.Joins("join shop s on g.shop_id=s.id")
+	db.Where("shop_id=?", shopIdInt)
+	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&sr).Error
+	// count
+	db = global.GVA_DB.Model(&manage.MallOrder{})
+	db.Select("count(*) as count, sum(tb_newbee_mall_order.total_price) as sum")
+	db.Joins("join tb_newbee_mall_order_item i on tb_newbee_mall_order.order_id=i.order_id")
+	db.Joins("join tb_newbee_mall_goods_info g on i.goods_id=g.goods_id")
+	db.Joins("join shop s on g.shop_id=s.id")
+	db.Where("shop_id=? and order_status=4 and pay_status=1", shopIdInt)
+	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&srp).Error
 
 	return err, shopOrders, total, sr, srp
 }
