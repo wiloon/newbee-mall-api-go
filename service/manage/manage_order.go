@@ -161,18 +161,18 @@ func (m *ManageOrderService) GetMallOrderInfoList(info request.PageInfo, orderNo
 
 // tb_newbee_mall_order.user_id,g.shop_id,g.goods_id,i.goods_count,tb_newbee_mall_order.pay_type,tb_newbee_mall_order.order_status
 type ShopOrderResult struct {
-	OrderId      int    `json:"orderId"`
-	OrderNo      string `json:"orderNo"`
-	UserId       int    `json:"userId,omitempty"`
-	ShopId       int    `json:"shopId,omitempty"`
-	GoodsId      int    `json:"goodsId,omitempty"`
-	PayType      int    `json:"payType"`
-	TotalPrice   string `json:"totalPrice"`
-	OrderStatus  int    `json:"orderStatus"`
-	CreateTime   string `json:"createTime"`
-	GoodsName    string `json:"goodsName"`
-	GoodsCount   int    `json:"goodsCount"`
-	SellingPrice string `json:"sellingPrice"`
+	OrderId      int     `json:"orderId"`
+	OrderNo      string  `json:"orderNo"`
+	UserId       int     `json:"userId,omitempty"`
+	ShopId       int     `json:"shopId,omitempty"`
+	GoodsId      int     `json:"goodsId,omitempty"`
+	PayType      int     `json:"payType"`
+	TotalPrice   float32 `json:"totalPrice"`
+	OrderStatus  int     `json:"orderStatus"`
+	CreateTime   string  `json:"createTime"`
+	GoodsName    string  `json:"goodsName"`
+	GoodsCount   int     `json:"goodsCount"`
+	SellingPrice float32 `json:"sellingPrice"`
 }
 
 // GetMallShopOrderInfoList 分页获取MallOrder记录

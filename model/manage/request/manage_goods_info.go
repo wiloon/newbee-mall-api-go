@@ -12,18 +12,18 @@ type MallGoodsInfoSearch struct {
 }
 
 type GoodsInfoAddParam struct {
-	Shop               int    `json:"shop"`
-	GoodsName          string `json:"goodsName"`
-	GoodsIntro         string `json:"goodsIntro"`
-	GoodsCategoryId    int    `json:"goodsCategoryId"`
-	GoodsCoverImg      string `json:"goodsCoverImg"`
-	GoodsCarousel      string `json:"goodsCarousel"`
-	GoodsDetailContent string `json:"goodsDetailContent"`
-	OriginalPrice      string `json:"originalPrice"`
-	SellingPrice       string `json:"sellingPrice"`
-	StockNum           string `json:"stockNum"`
-	Tag                string `json:"tag"`
-	GoodsSellStatus    string `json:"goodsSellStatus"`
+	Shop               int     `json:"shop"`
+	GoodsName          string  `json:"goodsName"`
+	GoodsIntro         string  `json:"goodsIntro"`
+	GoodsCategoryId    int     `json:"goodsCategoryId"`
+	GoodsCoverImg      string  `json:"goodsCoverImg"`
+	GoodsCarousel      string  `json:"goodsCarousel"`
+	GoodsDetailContent string  `json:"goodsDetailContent"`
+	OriginalPrice      float32 `json:"originalPrice"`
+	SellingPrice       float32 `json:"sellingPrice"`
+	StockNum           string  `json:"stockNum"`
+	Tag                string  `json:"tag"`
+	GoodsSellStatus    string  `json:"goodsSellStatus"`
 }
 
 // GoodsInfoUpdateParam 更新商品信息的入参
@@ -35,8 +35,8 @@ type GoodsInfoUpdateParam struct {
 	GoodsCoverImg      string          `json:"goodsCoverImg"`
 	GoodsCarousel      string          `json:"goodsCarousel"`
 	GoodsDetailContent string          `json:"goodsDetailContent"`
-	OriginalPrice      int             `json:"originalPrice"`
-	SellingPrice       int             `json:"sellingPrice"`
+	OriginalPrice      float32         `json:"originalPrice"`
+	SellingPrice       float32         `json:"sellingPrice"`
 	StockNum           string          `json:"stockNum"`
 	Tag                string          `json:"tag"`
 	GoodsSellStatus    int             `json:"goodsSellStatus"`

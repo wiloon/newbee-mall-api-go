@@ -153,9 +153,9 @@ func (m *MallShopCartService) GetCartItemsForSettle(token string, cartItemIds []
 	}
 	_, cartItemRes = getMallShoppingCartItemVOS(shopCartItems)
 	//购物车算价
-	priceTotal := 0
+	var priceTotal float32
 	for _, cartItem := range cartItemRes {
-		priceTotal = priceTotal + cartItem.GoodsCount*cartItem.SellingPrice
+		priceTotal = priceTotal + float32(cartItem.GoodsCount)*cartItem.SellingPrice
 	}
 	return
 }

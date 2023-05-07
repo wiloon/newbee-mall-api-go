@@ -1,11 +1,11 @@
 package response
 
 type GoodsSearchResponse struct {
-	GoodsId       int    `json:"goodsId"`
-	GoodsName     string `json:"goodsName"`
-	GoodsIntro    string `json:"goodsIntro"`
-	GoodsCoverImg string `json:"goodsCoverImg"`
-	SellingPrice  int    `json:"sellingPrice"`
+	GoodsId       int     `json:"goodsId"`
+	GoodsName     string  `json:"goodsName"`
+	GoodsIntro    string  `json:"goodsIntro"`
+	GoodsCoverImg string  `json:"goodsCoverImg"`
+	SellingPrice  float32 `json:"sellingPrice"`
 }
 
 type GoodsInfoDetailResponse struct {

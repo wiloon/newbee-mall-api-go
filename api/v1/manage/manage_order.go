@@ -143,7 +143,7 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	token := c.GetHeader("token")
 	global.GVA_LOG.Info(fmt.Sprintf("token: %v, params: %+v", token, saveOrderParam))
 
-	priceTotal := 0
+	var priceTotal float32
 	//保存订单
 
 	newBeeMallOrder.UserId = saveOrderParam.Member
@@ -153,8 +153,8 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 		response.FailWithMessage("查询失败"+err.Error(), c)
 	}
 
-	priceTotal = saveOrderParam.Number * goodsInfo.SellingPrice
-	global.GVA_LOG.Info(fmt.Sprintf("goods info: %+v, price total:=·]%v", goodsInfo, priceTotal))
+	priceTotal = float32(saveOrderParam.Number) * goodsInfo.SellingPrice
+	global.GVA_LOG.Info(fmt.Sprintf("goods info: %+v, price total: %v", goodsInfo, priceTotal))
 	l, _ := time.LoadLocation("Asia/Shanghai")
 	ct, err := time.ParseInLocation("2006-1-2T15:4:5", saveOrderParam.CreateTime, l)
 	if err != nil {

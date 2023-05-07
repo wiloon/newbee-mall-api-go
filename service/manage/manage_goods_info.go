@@ -27,8 +27,8 @@ func (m *ManageGoodsInfoService) CreateMallGoodsInfo(req manageReq.GoodsInfoAddP
 	if !errors.Is(global.GVA_DB.Where("goods_name=? AND goods_category_id=?", req.GoodsName, req.GoodsCategoryId).First(&manage.MallGoodsInfo{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("已存在相同的商品信息")
 	}
-	originalPrice, _ := strconv.Atoi(req.OriginalPrice)
-	sellingPrice, _ := strconv.Atoi(req.SellingPrice)
+	originalPrice := req.OriginalPrice
+	sellingPrice := req.SellingPrice
 	stockNum, _ := strconv.Atoi(req.StockNum)
 	goodsSellStatus, _ := strconv.Atoi(req.GoodsSellStatus)
 	goodsInfo := manage.MallGoodsInfo{

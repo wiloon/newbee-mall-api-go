@@ -5,7 +5,7 @@ import "main.go/model/common"
 type NewBeeMallOrderDetailVO struct {
 	OrderId                int                     `json:"orderId"`
 	OrderNo                string                  `json:"orderNo"`
-	TotalPrice             int                     `json:"totalPrice"`
+	TotalPrice             float32                 `json:"totalPrice"`
 	PayType                int                     `json:"payType"`
 	PayTypeString          string                  `json:"payTypeString"`
 	OrderStatus            int                     `json:"orderStatus"`
@@ -15,9 +15,9 @@ type NewBeeMallOrderDetailVO struct {
 }
 
 type NewBeeMallOrderItemVO struct {
-	GoodsId       int    `json:"goodsId"`
-	GoodsName     string `json:"goodsName"`
-	GoodsCount    int    `json:"goodsCount"`
-	GoodsCoverImg string `json:"goodsCoverImg"`
-	SellingPrice  int    `json:"sellingPrice"`
+	GoodsId       int     `json:"goodsId"`
+	GoodsName     string  `json:"goodsName"`
+	GoodsCount    int     `json:"goodsCount"`
+	GoodsCoverImg string  `json:"goodsCoverImg"`
+	SellingPrice  float32 `json:"sellingPrice"`
 }
