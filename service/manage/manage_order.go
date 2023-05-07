@@ -2,6 +2,7 @@ package manage
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/copier"
 	"main.go/global"
 	"main.go/model/common"
@@ -175,9 +176,13 @@ type ShopOrderResult struct {
 	SellingPrice  float32 `json:"sellingPrice"`
 	GoodsCoverImg string  `json:"goodsCoverImg"`
 }
+type SumResult struct {
+	Count int64   `json:"count"`
+	Sum   float32 `json:"sum"`
+}
 
 // GetMallShopOrderInfoList 分页获取MallOrder记录
-func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, shopId string) (err error, list interface{}, total int64) {
+func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, shopId string) (err error, list interface{}, total int64, sr SumResult, srp SumResult) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.PageNumber - 1)
 
@@ -199,5 +204,12 @@ func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, sho
 	}
 
 	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&shopOrders).Error
-	return err, shopOrders, total
+
+	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("order_status!=4 and pay_status!=1").Scan(&sr)
+
+	global.GVA_LOG.Info(fmt.Sprintf("sum result, count: %v, sum: %v", sr.Count, sr.Sum))
+
+	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("order_status=4 and pay_status=1").Scan(&srp)
+
+	return err, shopOrders, total, sr, srp
 }

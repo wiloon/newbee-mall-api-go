@@ -76,7 +76,9 @@ func (m *ManageOrderApi) GetMallShopOrderList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindQuery(&pageInfo)
 	shopId := c.Query("shopId")
-	if err, list, total := mallOrderService.GetMallShopOrderInfoList(pageInfo, shopId); err != nil {
+	// sum
+
+	if err, list, total, sr, srp := mallOrderService.GetMallShopOrderInfoList(pageInfo, shopId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -85,6 +87,8 @@ func (m *ManageOrderApi) GetMallShopOrderList(c *gin.Context) {
 			TotalCount: total,
 			CurrPage:   pageInfo.PageNumber,
 			PageSize:   pageInfo.PageSize,
+			Sr:         sr,
+			Srp:        srp,
 		}, "获取成功", c)
 	}
 }
@@ -167,6 +171,11 @@ func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	newBeeMallOrder.ExtraInfo = ""
 	newBeeMallOrder.OrderStatus = saveOrderParam.OrderStatus
 	newBeeMallOrder.PayType = saveOrderParam.PayType
+	if saveOrderParam.PayType == 1 || saveOrderParam.PayType == 2 {
+		newBeeMallOrder.PayStatus = 1
+	} else if saveOrderParam.PayType == 0 {
+		newBeeMallOrder.PayStatus = 0
+	}
 	global.GVA_LOG.Info(fmt.Sprintf("saving order, order id: %v,create time: %v", newBeeMallOrder.OrderId, newBeeMallOrder.CreateTime))
 	//生成订单项并保存订单项纪录
 	if err = global.GVA_DB.Save(&newBeeMallOrder).Error; err != nil {
