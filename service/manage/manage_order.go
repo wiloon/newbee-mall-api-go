@@ -205,7 +205,7 @@ func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, sho
 
 	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&shopOrders).Error
 
-	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("order_status!=4 and pay_status!=1").Scan(&sr)
+	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("1=1").Scan(&sr)
 
 	global.GVA_LOG.Info(fmt.Sprintf("sum result, count: %v, sum: %v", sr.Count, sr.Sum))
 
