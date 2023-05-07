@@ -161,18 +161,19 @@ func (m *ManageOrderService) GetMallOrderInfoList(info request.PageInfo, orderNo
 
 // tb_newbee_mall_order.user_id,g.shop_id,g.goods_id,i.goods_count,tb_newbee_mall_order.pay_type,tb_newbee_mall_order.order_status
 type ShopOrderResult struct {
-	OrderId      int     `json:"orderId"`
-	OrderNo      string  `json:"orderNo"`
-	UserId       int     `json:"userId,omitempty"`
-	ShopId       int     `json:"shopId,omitempty"`
-	GoodsId      int     `json:"goodsId,omitempty"`
-	PayType      int     `json:"payType"`
-	TotalPrice   float32 `json:"totalPrice"`
-	OrderStatus  int     `json:"orderStatus"`
-	CreateTime   string  `json:"createTime"`
-	GoodsName    string  `json:"goodsName"`
-	GoodsCount   int     `json:"goodsCount"`
-	SellingPrice float32 `json:"sellingPrice"`
+	OrderId       int     `json:"orderId"`
+	OrderNo       string  `json:"orderNo"`
+	UserId        int     `json:"userId,omitempty"`
+	ShopId        int     `json:"shopId,omitempty"`
+	GoodsId       int     `json:"goodsId,omitempty"`
+	PayType       int     `json:"payType"`
+	TotalPrice    float32 `json:"totalPrice"`
+	OrderStatus   int     `json:"orderStatus"`
+	CreateTime    string  `json:"createTime"`
+	GoodsName     string  `json:"goodsName"`
+	GoodsCount    int     `json:"goodsCount"`
+	SellingPrice  float32 `json:"sellingPrice"`
+	GoodsCoverImg string  `json:"goodsCoverImg"`
 }
 
 // GetMallShopOrderInfoList 分页获取MallOrder记录
@@ -182,7 +183,7 @@ func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, sho
 
 	var shopOrders []ShopOrderResult
 	db := global.GVA_DB.Model(&manage.MallOrder{})
-	db.Select("tb_newbee_mall_order.order_no,tb_newbee_mall_order.total_price,tb_newbee_mall_order.order_status,tb_newbee_mall_order.create_time,i.goods_name,i.goods_count,i.selling_price")
+	db.Select("tb_newbee_mall_order.order_no,tb_newbee_mall_order.total_price,tb_newbee_mall_order.order_status,DATE_FORMAT(tb_newbee_mall_order.create_time,\"%Y-%m-%d %T\") as create_time,i.goods_name,i.goods_count,i.selling_price,g.goods_cover_img")
 	db.Joins("join tb_newbee_mall_order_item i on tb_newbee_mall_order.order_id=i.order_id")
 	db.Joins("join tb_newbee_mall_goods_info g on i.goods_id=g.goods_id")
 	db.Joins("join shop s on g.shop_id=s.id")

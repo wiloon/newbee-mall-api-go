@@ -113,6 +113,14 @@ func (m *ManageAdminUserApi) AdminSaveMember(c *gin.Context) {
 	adminToken := c.GetHeader("token")
 	_ = adminToken
 	//todo admin token check
+
+	// check if member exist
+	var memberList []mall.MallUser
+	global.GVA_DB.Where("nick_name=? or login_name=?", memberParams.NickName, memberParams.Username).Find(&memberList)
+	if len(memberList) > 0 {
+		response.FailWithMessage("会员已存在", c)
+		return
+	}
 	var member mall.MallUser
 	member.NickName = memberParams.NickName
 	member.LoginName = memberParams.Username
