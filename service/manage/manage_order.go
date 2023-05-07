@@ -193,10 +193,8 @@ func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, sho
 	db.Joins("join tb_newbee_mall_goods_info g on i.goods_id=g.goods_id")
 	db.Joins("join shop s on g.shop_id=s.id")
 
-	if shopId != "" {
-		shopIdInt, _ := strconv.Atoi(shopId)
-		db.Where("shop_id", shopIdInt)
-	}
+	shopIdInt, _ := strconv.Atoi(shopId)
+	db.Where("shop_id", shopIdInt)
 
 	err = db.Count(&total).Error
 	if err != nil {
@@ -205,11 +203,11 @@ func (m *ManageOrderService) GetMallShopOrderInfoList(info request.PageInfo, sho
 
 	err = db.Limit(limit).Offset(offset).Order("tb_newbee_mall_order.update_time desc").Scan(&shopOrders).Error
 
-	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("1=1").Scan(&sr)
+	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("shop_id=?", shopIdInt).Scan(&sr)
 
 	global.GVA_LOG.Info(fmt.Sprintf("sum result, count: %v, sum: %v", sr.Count, sr.Sum))
 
-	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("order_status=4 and pay_status=1").Scan(&srp)
+	global.GVA_DB.Table("tb_newbee_mall_order").Select("count(*) as count,sum(total_price) as sum").Where("shop_id=? and order_status=4 and pay_status=1", shopIdInt).Scan(&srp)
 
 	return err, shopOrders, total, sr, srp
 }
