@@ -86,8 +86,9 @@ func (m *ManageAdminUserService) GetAllShops(token string) (err error, shops []s
 		return errors.New("不存在的用户"), shops
 	}
 	//global.GVA_DB.Find(&shops)
-
-	global.GVA_DB.Model(&manage.MallShop{}).Select("shop.id,shop.name,shop.owner,u.nick_name,shop.create_time").Joins("join tb_newbee_mall_user u on shop.owner=u.user_id").Scan(&shops)
+	mallUrl := global.GVA_CONFIG.Local.MallUrl
+	selectStr := fmt.Sprintf("shop.id,shop.name,shop.owner,u.nick_name,shop.create_time,concat('%s/#/home?shop=',shop.id) as url", mallUrl)
+	global.GVA_DB.Model(&manage.MallShop{}).Select(selectStr).Joins("join tb_newbee_mall_user u on shop.owner=u.user_id").Scan(&shops)
 	fmt.Println(shops)
 	return err, shops
 }

@@ -6,4 +6,5 @@ type Result struct {
 	Owner      int    `json:"owner"`
 	NickName   string `json:"nickName"`
 	CreateTime string `json:"createTime"`
+	Url        string `json:"url"`
 }
