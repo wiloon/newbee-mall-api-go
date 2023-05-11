@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"main.go/global"
 	"main.go/model/common/response"
 	"main.go/service"
 	"strings"
@@ -15,18 +16,20 @@ func AdminJWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if token == "" {
-			response.FailWithDetailed(nil, "未登录或非法访问", c)
+			global.GVA_LOG.Info("token is empty")
+			response.FailWithDetailedReLogin(nil, "未登录或非法访问", c)
 			c.Abort()
 			return
 		}
 		err, mallAdminUserToken := manageAdminUserTokenService.ExistAdminToken(token)
 		if err != nil {
-			response.FailWithDetailed(nil, "未登录或非法访问", c)
+			global.GVA_LOG.Info("failed to get token")
+			response.FailWithDetailedReLogin(nil, "未登录或非法访问", c)
 			c.Abort()
 			return
 		}
 		if time.Now().After(mallAdminUserToken.ExpireTime) {
-			response.FailWithDetailed(nil, "授权已过期", c)
+			response.FailWithDetailedReLogin(nil, "授权已过期", c)
 			err = manageAdminUserTokenService.DeleteMallAdminUserToken(token)
 			if err != nil {
 				return

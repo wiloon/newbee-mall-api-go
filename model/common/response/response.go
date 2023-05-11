@@ -15,6 +15,7 @@ const (
 	ERROR   = 500
 	SUCCESS = 200
 	UNLOGIN = 416
+	RELOGIN = 419
 )
 
 func Result(code int, data interface{}, msg string, c *gin.Context) {
@@ -53,7 +54,9 @@ func FailWithMessage(message string, c *gin.Context) {
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
 	Result(ERROR, data, message, c)
 }
-
+func FailWithDetailedReLogin(data interface{}, message string, c *gin.Context) {
+	Result(RELOGIN, data, message, c)
+}
 func UnLogin(data interface{}, c *gin.Context) {
 	Result(UNLOGIN, data, "未登录！", c)
 }
