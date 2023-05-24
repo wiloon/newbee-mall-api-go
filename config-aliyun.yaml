@@ -2,6 +2,7 @@
 local:
   path: static
   imageurlprefix: "https://mall-admin.wiloon.com/"
+  mallurl: "https://mall.wiloon.com"
 mysql:
   path: 127.0.0.1
   port: "3306"

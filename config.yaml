@@ -1,6 +1,7 @@
 ## 本地图片上传路径
 local:
-  path: static
+  path: /Users/wiloon/workspace/projects/newbee/newbee-mall-api-go/static
+  urlprefix: static
   imageurlprefix: "http://localhost:8888/"
   mallurl: "https://mall.wiloon.com"
 mysql:
