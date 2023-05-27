@@ -127,6 +127,21 @@ func (m *ManageOrderApi) AdminSaveShop(c *gin.Context) {
 
 	response.OkWithData("ok", c)
 }
+func (m *ManageOrderApi) AdminDeleteOrder(c *gin.Context) {
+	var order manage.MallOrder
+	_ = c.ShouldBindJSON(&order)
+	err := global.GVA_DB.Where("order_id=?", order.OrderId).Delete(&order).Error
+	if err != nil {
+		response.FailWithMessage("生成订单失败:"+err.Error(), c)
+	}
+	var orderItem manage.MallOrderItem
+	orderItem.OrderId = order.OrderId
+	err = global.GVA_DB.Where("order_id=?", order.OrderId).Delete(&orderItem).Error
+	if err != nil {
+		response.FailWithMessage("生成订单失败:"+err.Error(), c)
+	}
+	response.OkWithData("ok", c)
+}
 func (m *ManageOrderApi) AdminSaveOrder(c *gin.Context) {
 	var saveOrderParam mallReq.AdminSaveOrderParam
 	_ = c.ShouldBindJSON(&saveOrderParam)

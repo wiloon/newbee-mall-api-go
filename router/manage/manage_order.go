@@ -21,6 +21,7 @@ func (r *ManageOrderRouter) InitManageOrderRouter(Router *gin.RouterGroup) {
 		mallOrderRouter.GET("orders", mallOrderApi.GetMallOrderList)           // 获取MallOrder列表
 		mallOrderRouter.GET("shoporders", mallOrderApi.GetMallShopOrderList)   // shop order list
 		mallOrderRouter.POST("adminSaveOrder", mallOrderApi.AdminSaveOrder)    // admin save order
-		mallOrderRouter.POST("adminSaveShop", mallOrderApi.AdminSaveShop)      // admin save shop
+		mallOrderRouter.POST("adminDeleteOrder", mallOrderApi.AdminDeleteOrder)
+		mallOrderRouter.POST("adminSaveShop", mallOrderApi.AdminSaveShop) // admin save shop
 	}
 }
