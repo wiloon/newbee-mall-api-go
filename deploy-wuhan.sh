@@ -2,6 +2,7 @@
 cd /Users/wiloon/workspace/projects/newbee/newbee-mall-api-go || exit
 package_name="mall-api"
 echo "building"
+rm -f mall-api
 GOOS=linux GOARCH=amd64 go build -o ${package_name} main.go
 cp ${package_name} /Users/wiloon/tmp
 
