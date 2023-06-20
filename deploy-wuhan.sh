@@ -33,7 +33,6 @@ rm -rf dist
 
 sed -i '' 's/mall.wiloon.com/dbyhh.ehoneycomb.net/'  /Users/wiloon/workspace/projects/newbee/newbee-mall-vue3-app/src/utils/axios.js
 sed -i '' 's/mall.wiloon.com/dbyhh.ehoneycomb.net/'  /Users/wiloon/workspace/projects/newbee/newbee-mall-vue3-app/src/views/About.vue
-
 npm run build
 package_name="newbee-mall-app.tar.gz"
 gtar zcvf ${package_name} -C dist .
