@@ -5,8 +5,8 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-# Dump of table tb_newbee_mall_admin_user
-# ------------------------------------------------------------
+--Dump of table tb_newbee_mall_admin_user
+--------------------------------------------------------------
 
 DROP TABLE IF EXISTS `tb_newbee_mall_admin_user`;
 

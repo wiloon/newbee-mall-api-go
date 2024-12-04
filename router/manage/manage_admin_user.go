@@ -13,6 +13,7 @@ func (r *ManageAdminUserRouter) InitManageAdminUserRouter(Router *gin.RouterGrou
 	mallAdminUserRouter := Router.Group("v1").Use(middleware.AdminJWTAuth())
 	mallAdminUserWithoutRouter := Router.Group("v1")
 	var mallAdminUserApi = v1.ApiGroupApp.ManageApiGroup.ManageAdminUserApi
+	var testDataApi = v1.ApiGroupApp.ManageApiGroup.TestDataApi
 	{
 		mallAdminUserRouter.POST("createMallAdminUser", mallAdminUserApi.CreateAdminUser) // 新建MallAdminUser
 		mallAdminUserRouter.PUT("adminUser/name", mallAdminUserApi.UpdateAdminUserName)   // 更新MallAdminUser
@@ -25,6 +26,7 @@ func (r *ManageAdminUserRouter) InitManageAdminUserRouter(Router *gin.RouterGrou
 		mallAdminUserRouter.GET("user/all", mallAdminUserApi.AllUser)
 		mallAdminUserRouter.GET("shops", mallAdminUserApi.AllShops)
 		mallAdminUserRouter.POST("adminSaveMember", mallAdminUserApi.AdminSaveMember)
+		mallAdminUserRouter.GET("test-data", testDataApi.TestDataList)
 
 	}
 	{

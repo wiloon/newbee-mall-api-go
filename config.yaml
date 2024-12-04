@@ -6,12 +6,12 @@ local:
   imageurlprefix: "http://localhost:8888/"
   mallurl: "https://mall.wiloon.com"
 mysql:
-  path: 192.168.50.228
-  port: "32306"
+  path: 127.0.0.1
+  port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: newbee_mall
-  username: root
-  password: password0
+  username: user_0
+  password: password_0
   max-idle-conns: 0
   max-open-conns: 0
   log-mode: ""

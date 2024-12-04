@@ -4,6 +4,7 @@ import "main.go/service"
 
 type ManageGroup struct {
 	ManageAdminUserApi
+	TestDataApi
 	ManageGoodsCategoryApi
 	ManageGoodsInfoApi
 	ManageCarouselApi
@@ -14,6 +15,7 @@ type ManageGroup struct {
 var mallAdminUserService = service.ServiceGroupApp.ManageServiceGroup.ManageAdminUserService
 var mallAdminUserTokenService = service.ServiceGroupApp.ManageServiceGroup.ManageAdminUserTokenService
 var mallUserService = service.ServiceGroupApp.ManageServiceGroup.ManageUserService
+var testDataService = service.ServiceGroupApp.ManageServiceGroup.TestDataService
 var mallGoodsCategoryService = service.ServiceGroupApp.ManageServiceGroup.ManageGoodsCategoryService
 var fileUploadAndDownloadService = service.ServiceGroupApp.ExampleServiceGroup.FileUploadAndDownloadService
 var mallGoodsInfoService = service.ServiceGroupApp.ManageServiceGroup.ManageGoodsInfoService
